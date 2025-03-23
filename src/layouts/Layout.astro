@@ -1,0 +1,520 @@
+---
+import { getLanguageFromUrl, useTranslations } from '../utils/i18n';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+const currentLanguage = getLanguageFromUrl(Astro.url.pathname);
+const t = useTranslations(currentLanguage);
+---
+
+<!doctype html>
+<html lang={currentLanguage}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Crypto Insights - Latest news and analysis on cryptocurrency" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<title>{title}</title>
+		<script>
+			// Comprehensive error handling for browser extensions
+			window.addEventListener('error', function(e) {
+				// Check for common extension-related errors
+				if (e.message && (
+					e.message.includes("Cannot read properties of null") ||
+					e.message.includes("undefined is not an object") ||
+					e.message.includes("null is not an object") ||
+					e.message.includes("extension") ||
+					e.message.includes("type")
+				)) {
+					console.warn('Prevented an error from a browser extension:', e.message);
+					e.stopPropagation();
+					e.preventDefault();
+					return true; // Prevents the error from propagating
+				}
+			}, true);
+
+			// Additional protection for unhandled promise rejections
+			window.addEventListener('unhandledrejection', function(e) {
+				if (e.reason && typeof e.reason.message === 'string' && (
+					e.reason.message.includes("extension") ||
+					e.reason.message.includes("Cannot read properties") ||
+					e.reason.message.includes("type")
+				)) {
+					console.warn('Prevented an unhandled rejection from extension:', e.reason.message);
+					e.preventDefault();
+					return true;
+				}
+			});
+
+			// Protect against extension conflicts by defining a dummy object
+			// This can help with extensions that expect certain objects to exist
+			if (!window.chrome) window.chrome = {};
+			if (!window.browser) window.browser = {};
+			
+			// Additional protection for the specific error
+			document.addEventListener('DOMContentLoaded', function() {
+				// Create a proxy for any potential extension targets
+				const originalGetElementById = document.getElementById;
+				document.getElementById = function(id) {
+					try {
+						return originalGetElementById.call(document, id);
+					} catch (e) {
+						console.warn('Prevented error in getElementById:', e);
+						return null;
+					}
+				};
+			});
+		</script>
+	</head>
+	<body>
+		<div class="background">
+			<div class="gradient-sphere gradient-sphere-1"></div>
+			<div class="gradient-sphere gradient-sphere-2"></div>
+			<div class="gradient-sphere gradient-sphere-3"></div>
+		</div>
+		
+		<header class="glass-panel">
+			<div class="container header-container">
+				<div class="logo">
+					<a href="/">
+						<h1>Crypto<span>Insights</span></h1>
+					</a>
+				</div>
+				<nav>
+					<ul>
+						<li><a href="/">{t('home')}</a></li>
+						<li><a href="/news">{t('news')}</a></li>
+						<li><a href="/analysis">{t('analysis')}</a></li>
+						<li><a href="/guides">{t('guides')}</a></li>
+						<li><a href="/about">{t('about')}</a></li>
+					</ul>
+				</nav>
+				<div class="header-actions">
+					<button class="search-btn"><i class="fas fa-search"></i></button>
+					<button class="theme-toggle"><i class="fas fa-moon"></i></button>
+					<LanguageSwitcher />
+				</div>
+			</div>
+		</header>
+
+		<main>
+			<slot />
+		</main>
+
+		<footer class="glass-panel">
+			<div class="container">
+				<div class="footer-grid">
+					<div class="footer-about">
+						<h3>Crypto<span>Insights</span></h3>
+						<p>{t('yourTrustedSource')}</p>
+						<div class="social-links">
+							<a href="#"><i class="fab fa-twitter"></i></a>
+							<a href="#"><i class="fab fa-telegram"></i></a>
+							<a href="#"><i class="fab fa-discord"></i></a>
+							<a href="#"><i class="fab fa-youtube"></i></a>
+						</div>
+					</div>
+					<div class="footer-links">
+						<h4>{t('quickLinks')}</h4>
+						<ul>
+							<li><a href="/">{t('home')}</a></li>
+							<li><a href="/news">{t('news')}</a></li>
+							<li><a href="/analysis">{t('analysis')}</a></li>
+							<li><a href="/guides">{t('guides')}</a></li>
+							<li><a href="/about">{t('about')}</a></li>
+						</ul>
+					</div>
+					<div class="footer-links">
+						<h4>{t('resources')}</h4>
+						<ul>
+							<li><a href="/glossary">{t('cryptoGlossary')}</a></li>
+							<li><a href="/tools">{t('toolsCalculators')}</a></li>
+							<li><a href="/learn">{t('learnCrypto')}</a></li>
+							<li><a href="/faq">{t('faq')}</a></li>
+						</ul>
+					</div>
+					<div class="footer-newsletter">
+						<h4>{t('subscribeNewsletter')}</h4>
+						<p>{t('newsletterDesc')}</p>
+						<form>
+							<input type="email" placeholder={t('emailPlaceholder')}>
+							<button type="submit">{t('subscribe')}</button>
+						</form>
+					</div>
+				</div>
+				<div class="footer-bottom">
+					<p>{t('copyright')}</p>
+					<div class="footer-bottom-links">
+						<a href="/privacy">{t('privacyPolicy')}</a>
+						<a href="/terms">{t('termsOfService')}</a>
+						<a href="/disclaimer">{t('disclaimer')}</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--primary: #6d28d9;
+		--primary-light: #8b5cf6;
+		--secondary: #10b981;
+		--dark: #111827;
+		--dark-light: #1f2937;
+		--light: #f9fafb;
+		--gray: #6b7280;
+		--glass-bg: rgba(255, 255, 255, 0.1);
+		--glass-border: rgba(255, 255, 255, 0.2);
+		--glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+		--blur-amount: 10px;
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	html {
+		font-family: 'Inter', system-ui, sans-serif;
+		background: var(--dark);
+		color: var(--light);
+		scroll-behavior: smooth;
+	}
+
+	body {
+		min-height: 100vh;
+		overflow-x: hidden;
+		position: relative;
+	}
+
+	.background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		overflow: hidden;
+	}
+
+	.gradient-sphere {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(70px);
+	}
+
+	.gradient-sphere-1 {
+		top: -100px;
+		right: -100px;
+		width: 500px;
+		height: 500px;
+		background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(109, 40, 217, 0) 70%);
+	}
+
+	.gradient-sphere-2 {
+		bottom: -150px;
+		left: -150px;
+		width: 600px;
+		height: 600px;
+		background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0) 70%);
+	}
+
+	.gradient-sphere-3 {
+		top: 40%;
+		left: 30%;
+		width: 400px;
+		height: 400px;
+		background: radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, rgba(249, 115, 22, 0) 70%);
+	}
+
+	.glass-panel {
+		background: var(--glass-bg);
+		backdrop-filter: blur(var(--blur-amount));
+		-webkit-backdrop-filter: blur(var(--blur-amount));
+		border: 1px solid var(--glass-border);
+		box-shadow: var(--glass-shadow);
+		border-radius: 10px;
+	}
+
+	.container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	a {
+		color: var(--light);
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+
+	a:hover {
+		color: var(--primary-light);
+	}
+
+	button {
+		cursor: pointer;
+		font-family: 'Inter', sans-serif;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	/* Header Styles */
+	header {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		padding: 1rem 0;
+		margin-bottom: 2rem;
+	}
+
+	.header-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.logo h1 {
+		font-size: 1.8rem;
+		font-weight: 700;
+	}
+
+	.logo span {
+		color: var(--primary-light);
+	}
+
+	nav ul {
+		display: flex;
+		list-style: none;
+		gap: 2rem;
+	}
+
+	nav a {
+		font-weight: 500;
+		position: relative;
+	}
+
+	nav a::after {
+		content: '';
+		position: absolute;
+		bottom: -5px;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background: var(--primary-light);
+		transition: width 0.3s ease;
+	}
+
+	nav a:hover::after {
+		width: 100%;
+	}
+
+	.header-actions {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.header-actions button {
+		background: transparent;
+		border: none;
+		color: var(--light);
+		font-size: 1.2rem;
+		padding: 0.5rem;
+		border-radius: 50%;
+		transition: all 0.3s ease;
+	}
+
+	.header-actions button:hover {
+		background: var(--glass-bg);
+	}
+
+	/* Main Content */
+	main {
+		min-height: 70vh;
+		padding: 1rem 0 4rem;
+	}
+
+	/* Footer Styles */
+	footer {
+		padding: 3rem 0 1rem;
+		margin-top: 2rem;
+	}
+
+	.footer-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.footer-about {
+		grid-column: span 1;
+	}
+
+	.footer-about h3 {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.footer-about span {
+		color: var(--primary-light);
+	}
+
+	.footer-about p {
+		margin-bottom: 1.5rem;
+		color: var(--gray);
+		font-size: 0.9rem;
+	}
+
+	.social-links {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.social-links a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: var(--glass-bg);
+		transition: all 0.3s ease;
+	}
+
+	.social-links a:hover {
+		background: var(--primary);
+		transform: translateY(-3px);
+	}
+
+	.footer-links h4 {
+		margin-bottom: 1.2rem;
+		font-size: 1.1rem;
+	}
+
+	.footer-links ul {
+		list-style: none;
+	}
+
+	.footer-links li {
+		margin-bottom: 0.8rem;
+	}
+
+	.footer-links a {
+		color: var(--gray);
+		font-size: 0.9rem;
+		transition: all 0.3s ease;
+	}
+
+	.footer-links a:hover {
+		color: var(--light);
+		padding-left: 5px;
+	}
+
+	.footer-newsletter h4 {
+		margin-bottom: 1rem;
+		font-size: 1.1rem;
+	}
+
+	.footer-newsletter p {
+		margin-bottom: 1rem;
+		color: var(--gray);
+		font-size: 0.9rem;
+	}
+
+	.footer-newsletter form {
+		display: flex;
+		flex-direction: column;
+		gap: 0.8rem;
+	}
+
+	.footer-newsletter input {
+		padding: 0.8rem 1rem;
+		border-radius: 5px;
+		border: 1px solid var(--glass-border);
+		background: var(--glass-bg);
+		color: var(--light);
+	}
+
+	.footer-newsletter button {
+		padding: 0.8rem;
+		border-radius: 5px;
+		border: none;
+		background: var(--primary);
+		color: white;
+		font-weight: 500;
+		transition: all 0.3s ease;
+	}
+
+	.footer-newsletter button:hover {
+		background: var(--primary-light);
+	}
+
+	.footer-bottom {
+		padding-top: 2rem;
+		border-top: 1px solid var(--glass-border);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 0.9rem;
+	}
+
+	.footer-bottom p {
+		color: var(--gray);
+	}
+
+	.footer-bottom-links {
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.footer-bottom-links a {
+		color: var(--gray);
+	}
+
+	/* Responsive */
+	@media (max-width: 992px) {
+		.footer-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		
+		.footer-about {
+			grid-column: span 2;
+		}
+	}
+
+	@media (max-width: 768px) {
+		nav {
+			display: none;
+		}
+		
+		.footer-grid {
+			grid-template-columns: 1fr;
+		}
+		
+		.footer-about {
+			grid-column: span 1;
+		}
+		
+		.footer-bottom {
+			flex-direction: column;
+			gap: 1rem;
+			text-align: center;
+		}
+	}
+</style>

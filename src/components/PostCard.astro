@@ -1,0 +1,128 @@
+---
+interface Props {
+  title: string;
+  excerpt: string;
+  image: string;
+  category: string;
+  date: string;
+  author: string;
+  authorImage: string;
+  slug: string;
+}
+
+const { title, excerpt, image, category, date, author, authorImage, slug } = Astro.props;
+---
+
+<article class="post-card glass-panel">
+  <a href={`/post/${slug}`} class="post-card-link">
+    <div class="post-card-image">
+      <img src={image} alt={title} />
+      <span class="category">{category}</span>
+    </div>
+    <div class="post-card-content">
+      <h3>{title}</h3>
+      <p class="excerpt">{excerpt}</p>
+      <div class="post-meta">
+        <div class="author">
+          <img src={authorImage} alt={author} />
+          <span>{author}</span>
+        </div>
+        <span class="date">{date}</span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .post-card {
+    height: 100%;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .post-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .post-card-link {
+    display: block;
+    height: 100%;
+    color: var(--light);
+    padding: 1rem;
+  }
+  
+  .post-card-image {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 180px;
+    margin-bottom: 1rem;
+  }
+  
+  .post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .post-card:hover .post-card-image img {
+    transform: scale(1.05);
+  }
+  
+  .category {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--primary);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .post-card-content h3 {
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
+  
+  .excerpt {
+    margin-bottom: 1rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--gray);
+  }
+  
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .author img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  @media (max-width: 768px) {
+    .post-card-image {
+      height: 200px;
+    }
+  }
+</style>

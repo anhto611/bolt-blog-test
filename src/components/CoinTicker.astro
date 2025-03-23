@@ -1,0 +1,115 @@
+---
+import { getLanguageFromUrl, useTranslations } from '../utils/i18n';
+
+const currentLanguage = getLanguageFromUrl(Astro.url.pathname);
+const t = useTranslations(currentLanguage);
+
+// Sample coin data - in a real app, this would come from an API
+const coins = [
+  { name: 'Bitcoin', symbol: 'BTC', price: 60245.32, change: 2.34, logo: '/favicon.svg' },
+  { name: 'Ethereum', symbol: 'ETH', price: 3245.67, change: 1.56, logo: '/favicon.svg' },
+  { name: 'Binance Coin', symbol: 'BNB', price: 412.89, change: -0.78, logo: '/favicon.svg' },
+  { name: 'Solana', symbol: 'SOL', price: 102.45, change: 5.67, logo: '/favicon.svg' },
+  { name: 'Cardano', symbol: 'ADA', price: 0.45, change: -1.23, logo: '/favicon.svg' },
+  { name: 'XRP', symbol: 'XRP', price: 0.56, change: 0.89, logo: '/favicon.svg' },
+  { name: 'Polkadot', symbol: 'DOT', price: 6.78, change: 3.45, logo: '/favicon.svg' },
+  { name: 'Dogecoin', symbol: 'DOGE', price: 0.078, change: -2.34, logo: '/favicon.svg' }
+];
+---
+
+<div class="coin-ticker-container glass-panel">
+  <div class="coin-ticker">
+    {coins.map(coin => (
+      <div class="coin-item">
+        <img src={coin.logo} alt={coin.name} class="coin-logo" />
+        <div class="coin-info">
+          <span class="coin-name">{coin.symbol}</span>
+          <span class="coin-price">${coin.price.toLocaleString()}</span>
+          <span class={`coin-change ${coin.change >= 0 ? 'positive' : 'negative'}`}>
+            {coin.change >= 0 ? '+' : ''}{coin.change}%
+          </span>
+        </div>
+      </div>
+    ))}
+    {/* Duplicate the coins for continuous scrolling effect */}
+    {coins.map(coin => (
+      <div class="coin-item">
+        <img src={coin.logo} alt={coin.name} class="coin-logo" />
+        <div class="coin-info">
+          <span class="coin-name">{coin.symbol}</span>
+          <span class="coin-price">${coin.price.toLocaleString()}</span>
+          <span class={`coin-change ${coin.change >= 0 ? 'positive' : 'negative'}`}>
+            {coin.change >= 0 ? '+' : ''}{coin.change}%
+          </span>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .coin-ticker-container {
+    margin: 2rem 0;
+    padding: 0.8rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .coin-ticker {
+    display: flex;
+    animation: scroll 30s linear infinite;
+    width: max-content;
+  }
+  
+  .coin-item {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+    padding: 0 0.5rem;
+  }
+  
+  .coin-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  
+  .coin-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .coin-name {
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  
+  .coin-price {
+    margin-right: 0.5rem;
+  }
+  
+  .coin-change {
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+  
+  .positive {
+    color: #10b981;
+  }
+  
+  .negative {
+    color: #ef4444;
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+</style>

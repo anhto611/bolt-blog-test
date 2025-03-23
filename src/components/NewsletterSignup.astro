@@ -1,0 +1,133 @@
+---
+import { getLanguageFromUrl, useTranslations } from '../utils/i18n';
+
+const currentLanguage = getLanguageFromUrl(Astro.url.pathname);
+const t = useTranslations(currentLanguage);
+---
+
+<section class="newsletter-section glass-panel">
+  <div class="newsletter-content">
+    <h2>{t('subscribeNewsletter')}</h2>
+    <p>{t('newsletterDesc')}</p>
+    <form class="newsletter-form">
+      <input type="email" placeholder={t('emailPlaceholder')} required />
+      <button type="submit">{t('subscribe')}</button>
+    </form>
+  </div>
+  <div class="newsletter-decoration">
+    <div class="decoration-circle"></div>
+    <div class="decoration-circle"></div>
+    <div class="decoration-circle"></div>
+  </div>
+</section>
+
+<style>
+  .newsletter-section {
+    margin: 3rem 0;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .newsletter-content {
+    max-width: 600px;
+    z-index: 1;
+  }
+  
+  .newsletter-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .newsletter-content p {
+    margin-bottom: 1.5rem;
+    color: var(--gray);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .newsletter-form input {
+    flex: 1;
+    padding: 0.8rem 1.2rem;
+    border-radius: 5px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--light);
+    font-size: 1rem;
+  }
+  
+  .newsletter-form button {
+    padding: 0 1.5rem;
+    border-radius: 5px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .newsletter-form button:hover {
+    background: var(--primary-light);
+  }
+  
+  .newsletter-decoration {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40%;
+    overflow: hidden;
+  }
+  
+  .decoration-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--primary);
+    opacity: 0.1;
+  }
+  
+  .decoration-circle:nth-child(1) {
+    width: 200px;
+    height: 200px;
+    right: -50px;
+    top: -50px;
+  }
+  
+  .decoration-circle:nth-child(2) {
+    width: 150px;
+    height: 150px;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .decoration-circle:nth-child(3) {
+    width: 100px;
+    height: 100px;
+    right: 0;
+    bottom: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .newsletter-section {
+      padding: 2rem 1.5rem;
+    }
+    
+    .newsletter-form {
+      flex-direction: column;
+    }
+    
+    .newsletter-decoration {
+      display: none;
+    }
+  }
+</style>

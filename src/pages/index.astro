@@ -1,0 +1,246 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FeaturedPost from '../components/FeaturedPost.astro';
+import CoinTicker from '../components/CoinTicker.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import CategorySection from '../components/CategorySection.astro';
+import PostCard from '../components/PostCard.astro';
+import { getLanguageFromUrl, useTranslations } from '../utils/i18n';
+
+const currentLanguage = getLanguageFromUrl(Astro.url.pathname);
+const t = useTranslations(currentLanguage);
+
+// Sample featured posts data - in a real app, this would come from a CMS or API
+const featuredPosts = [
+  {
+    title: currentLanguage === 'vi' ? "Bitcoin vượt mốc $60,000 khi các tổ chức tài chính tăng cường áp dụng" : "Bitcoin Surges Past $60,000 as Institutional Adoption Accelerates",
+    excerpt: currentLanguage === 'vi' ? "Bitcoin đã vượt qua mốc $60,000 một lần nữa khi các tổ chức tài chính lớn tiếp tục chấp nhận tiền điện tử. Đây là một cột mốc quan trọng trong việc áp dụng tài sản kỹ thuật số vào dòng chính." : "Bitcoin has surged past $60,000 once again as major financial institutions continue to embrace cryptocurrency. This marks a significant milestone in the mainstream adoption of digital assets.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Thị trường" : "Market",
+    date: currentLanguage === 'vi' ? "15 Tháng 5, 2023" : "May 15, 2023",
+    author: "Alex Johnson",
+    authorImage: "/favicon.svg",
+    slug: "bitcoin-surges-past-60000"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Ethereum 2.0: Những điều bạn cần biết về The Merge" : "Ethereum 2.0: What You Need to Know About the Merge",
+    excerpt: currentLanguage === 'vi' ? "Bản nâng cấp Ethereum 2.0 đã được mong đợi từ lâu đang đến gần. Đây là những gì bạn cần biết về việc chuyển đổi sang proof-of-stake và cách nó sẽ ảnh hưởng đến mạng lưới." : "The long-awaited Ethereum 2.0 upgrade is approaching. Here's what you need to know about the transition to proof-of-stake and how it will affect the network.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Công nghệ" : "Technology",
+    date: currentLanguage === 'vi' ? "12 Tháng 5, 2023" : "May 12, 2023",
+    author: "Sarah Chen",
+    authorImage: "/favicon.svg",
+    slug: "ethereum-2-what-you-need-to-know"
+  },
+  {
+    title: currentLanguage === 'vi' ? "DeFi Summer 2.0: Các giao thức mới đang thu hút sự chú ý" : "DeFi Summer 2.0: New Protocols Gaining Traction",
+    excerpt: currentLanguage === 'vi' ? "Một làn sóng mới các giao thức DeFi đang thu hút sự chú ý, có thể báo hiệu sự khởi đầu của 'DeFi Summer 2.0'. Chúng tôi phân tích các dự án đầy hứa hẹn nhất." : "A new wave of DeFi protocols is gaining traction, potentially signaling the start of 'DeFi Summer 2.0'. We analyze the most promising projects.",
+    image: "/favicon.svg",
+    category: "DeFi",
+    date: currentLanguage === 'vi' ? "10 Tháng 5, 2023" : "May 10, 2023",
+    author: "Michael Rodriguez",
+    authorImage: "/favicon.svg",
+    slug: "defi-summer-2-new-protocols"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Thị trường NFT cho thấy dấu hiệu phục hồi sau thời gian dài suy thoái" : "NFT Market Shows Signs of Recovery After Prolonged Slump",
+    excerpt: currentLanguage === 'vi' ? "Sau nhiều tháng doanh số giảm, thị trường NFT đang cho thấy dấu hiệu phục hồi với một số bộ sưu tập nổi tiếng nhận được sự quan tâm mới." : "After months of declining sales, the NFT market is showing signs of recovery with several high-profile collections seeing renewed interest.",
+    image: "/favicon.svg",
+    category: "NFTs",
+    date: currentLanguage === 'vi' ? "8 Tháng 5, 2023" : "May 8, 2023",
+    author: "Emily Wong",
+    authorImage: "/favicon.svg",
+    slug: "nft-market-recovery"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Bối cảnh quy định: Các chính sách mới đang định hình Crypto như thế nào" : "Regulatory Landscape: How New Policies Are Shaping Crypto",
+    excerpt: currentLanguage === 'vi' ? "Những phát triển quy định gần đây trên toàn thế giới đang có tác động đáng kể đến thị trường tiền điện tử. Chúng tôi xem xét các ảnh hưởng đối với nhà đầu tư." : "Recent regulatory developments around the world are having a significant impact on cryptocurrency markets. We examine the implications for investors.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Quy định" : "Regulation",
+    date: currentLanguage === 'vi' ? "5 Tháng 5, 2023" : "May 5, 2023",
+    author: "David Miller",
+    authorImage: "/favicon.svg",
+    slug: "regulatory-landscape-crypto"
+  }
+];
+
+// Sample trending posts
+const trendingPosts = [
+  {
+    title: currentLanguage === 'vi' ? "Giải pháp Layer 2: Mở rộng Blockchain cho việc áp dụng đại trà" : "Layer 2 Solutions: Scaling Blockchain for Mass Adoption",
+    excerpt: currentLanguage === 'vi' ? "Các giải pháp mở rộng Layer 2 đang ngày càng trở nên quan trọng đối với các mạng blockchain. Chúng tôi khám phá các công nghệ hàng đầu và tác động tiềm tàng của chúng." : "Layer 2 scaling solutions are becoming increasingly important for blockchain networks. We explore the leading technologies and their potential impact.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Công nghệ" : "Technology",
+    date: currentLanguage === 'vi' ? "14 Tháng 5, 2023" : "May 14, 2023",
+    author: "James Wilson",
+    authorImage: "/favicon.svg",
+    slug: "layer-2-solutions-scaling-blockchain"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Tiền kỹ thuật số của Ngân hàng Trung ương: Bạn hay thù của Crypto?" : "Central Bank Digital Currencies: Friend or Foe to Crypto?",
+    excerpt: currentLanguage === 'vi' ? "Khi ngày càng nhiều ngân hàng trung ương phát triển tiền kỹ thuật số riêng, chúng tôi phân tích ý nghĩa của điều này đối với tương lai của tiền điện tử phi tập trung." : "As more central banks develop their own digital currencies, we analyze what this means for the future of decentralized cryptocurrencies.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Kinh tế" : "Economy",
+    date: currentLanguage === 'vi' ? "13 Tháng 5, 2023" : "May 13, 2023",
+    author: "Lisa Thompson",
+    authorImage: "/favicon.svg",
+    slug: "cbdcs-friend-or-foe"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Bảo mật Crypto: Các biện pháp tốt nhất để bảo vệ tài sản của bạn" : "Crypto Security: Best Practices to Protect Your Assets",
+    excerpt: currentLanguage === 'vi' ? "Với các vụ hack crypto ngày càng gia tăng, việc bảo mật tài sản kỹ thuật số của bạn chưa bao giờ quan trọng hơn. Tìm hiểu các biện pháp bảo mật thiết yếu mà mọi nhà đầu tư nên tuân theo." : "With crypto hacks on the rise, securing your digital assets has never been more important. Learn the essential security practices every investor should follow.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Bảo mật" : "Security",
+    date: currentLanguage === 'vi' ? "11 Tháng 5, 2023" : "May 11, 2023",
+    author: "Robert Chang",
+    authorImage: "/favicon.svg",
+    slug: "crypto-security-best-practices"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Sự trỗi dậy của GameFi: Nơi Game gặp Tài chính" : "The Rise of GameFi: Where Gaming Meets Finance",
+    excerpt: currentLanguage === 'vi' ? "GameFi đang cách mạng hóa cả ngành game và tài chính. Chúng tôi xem xét các trò chơi play-to-earn đầy hứa hẹn nhất và mô hình kinh tế của chúng." : "GameFi is revolutionizing both the gaming and finance industries. We look at the most promising play-to-earn games and their economic models.",
+    image: "/favicon.svg",
+    category: "GameFi",
+    date: currentLanguage === 'vi' ? "9 Tháng 5, 2023" : "May 9, 2023",
+    author: "Sophia Martinez",
+    authorImage: "/favicon.svg",
+    slug: "rise-of-gamefi"
+  }
+];
+
+// Sample latest news
+const latestNews = [
+  {
+    title: currentLanguage === 'vi' ? "Ngân hàng lớn công bố dịch vụ lưu ký Crypto cho khách hàng tổ chức" : "Major Bank Announces Crypto Custody Service for Institutional Clients",
+    excerpt: currentLanguage === 'vi' ? "Một trong những ngân hàng lớn nhất thế giới đã công bố dịch vụ lưu ký tiền điện tử mới nhằm vào các nhà đầu tư tổ chức, đánh dấu một bước tiến nữa trong việc áp dụng vào dòng chính." : "One of the world's largest banks has announced a new cryptocurrency custody service aimed at institutional investors, marking another step in mainstream adoption.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Kinh doanh" : "Business",
+    date: currentLanguage === 'vi' ? "15 Tháng 5, 2023" : "May 15, 2023",
+    author: "Thomas Anderson",
+    authorImage: "/favicon.svg",
+    slug: "major-bank-crypto-custody"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Liên minh Blockchain mới nhằm giải quyết vấn đề chuỗi cung ứng" : "New Blockchain Consortium Aims to Solve Supply Chain Issues",
+    excerpt: currentLanguage === 'vi' ? "Một nhóm các tập đoàn lớn đã thành lập một liên minh blockchain mới tập trung vào việc giải quyết các vấn đề không hiệu quả trong chuỗi cung ứng thông qua công nghệ sổ cái phân tán." : "A group of major corporations has formed a new blockchain consortium focused on addressing supply chain inefficiencies through distributed ledger technology.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Doanh nghiệp" : "Enterprise",
+    date: currentLanguage === 'vi' ? "14 Tháng 5, 2023" : "May 14, 2023",
+    author: "Jennifer Lee",
+    authorImage: "/favicon.svg",
+    slug: "blockchain-consortium-supply-chain"
+  },
+  {
+    title: currentLanguage === 'vi' ? "Sàn giao dịch Crypto mở rộng dịch vụ bao gồm giao dịch cổ phiếu" : "Crypto Exchange Expands Services to Include Stock Trading",
+    excerpt: currentLanguage === 'vi' ? "Một sàn giao dịch tiền điện tử hàng đầu đã công bố kế hoạch cung cấp giao dịch cổ phiếu truyền thống, làm mờ ranh giới giữa thị trường tài sản truyền thống và kỹ thuật số." : "A leading cryptocurrency exchange has announced plans to offer traditional stock trading, blurring the lines between conventional and digital asset markets.",
+    image: "/favicon.svg",
+    category: currentLanguage === 'vi' ? "Kinh doanh" : "Business",
+    date: currentLanguage === 'vi' ? "13 Tháng 5, 2023" : "May 13, 2023",
+    author: "Kevin Zhang",
+    authorImage: "/favicon.svg",
+    slug: "crypto-exchange-stock-trading"
+  }
+];
+---
+
+<Layout title={currentLanguage === 'vi' ? "CryptoInsights - Tin tức, Phân tích & Thông tin chi tiết mới nhất về Tiền điện tử" : "CryptoInsights - Latest Cryptocurrency News, Analysis & Insights"}>
+  <div class="container">
+    <!-- Featured Posts Section -->
+    <section class="featured-posts-section">
+      <h2 class="section-title">{t('featuredStories')}</h2>
+      <div class="featured-posts-grid">
+        {featuredPosts.map((post, index) => (
+          <FeaturedPost 
+            title={post.title}
+            excerpt={post.excerpt}
+            image={post.image}
+            category={post.category}
+            date={post.date}
+            author={post.author}
+            authorImage={post.authorImage}
+            featured={index === 0}
+            slug={post.slug}
+          />
+        ))}
+      </div>
+    </section>
+    
+    <!-- Coin Ticker -->
+    <CoinTicker />
+    
+    <!-- Trending Section -->
+    <CategorySection title="trendingNow" viewAllLink="/category/trending">
+      {trendingPosts.map(post => (
+        <PostCard 
+          title={post.title}
+          excerpt={post.excerpt}
+          image={post.image}
+          category={post.category}
+          date={post.date}
+          author={post.author}
+          authorImage={post.authorImage}
+          slug={post.slug}
+        />
+      ))}
+    </CategorySection>
+    
+    <!-- Newsletter Signup -->
+    <NewsletterSignup />
+    
+    <!-- Latest News Section -->
+    <CategorySection title="latestNews" viewAllLink="/news">
+      {latestNews.map(post => (
+        <PostCard 
+          title={post.title}
+          excerpt={post.excerpt}
+          image={post.image}
+          category={post.category}
+          date={post.date}
+          author={post.author}
+          authorImage={post.authorImage}
+          slug={post.slug}
+        />
+      ))}
+    </CategorySection>
+  </div>
+</Layout>
+
+<style>
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-left: 1rem;
+  }
+  
+  .section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  
+  .featured-posts-section {
+    margin-bottom: 3rem;
+  }
+  
+  .featured-posts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1.5rem;
+    height: 600px;
+  }
+  
+  @media (max-width: 992px) {
+    .featured-posts-grid {
+      height: auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+  }
+</style>
